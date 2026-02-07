@@ -1358,27 +1358,53 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 	// Transform変数を作る
-	Transform transform{ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	Transform cameraTransfrom{ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-10.0f} };
-	Transform transformSprite{ {1.0f,1.0f,1.0f,},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	Transform uvTransformSprite{
+	Transform transform
+	{ 
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f} 
+	};
+	Transform cameraTransfrom
+	{ 
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,-10.0f} 
+	};
+	Transform transformSprite
+	{ 
+		{1.0f,1.0f,1.0f,},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f} 
+	};
+	Transform uvTransformSprite
+	{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f}
 	};
 
-	Transform transformObj{ {1.5f, 1.5f, 1.5f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
-	Transform cameraTransformObj{ {1.0f, 1.0f, 1.0f}, {0.0f,0.0f,0.0f}, {0.0f,0.0f,-10.0f} };
+	Transform transformObj
+	{ 
+		{1.5f, 1.5f, 1.5f},
+		{0.0f,0.0f,0.0f}, 
+		{0.0f,0.0f,0.0f} 
+	};
+	Transform cameraTransformObj
+	{ 
+		{1.0f, 1.0f, 1.0f}, 
+		{0.0f,0.0f,0.0f}, 
+		{0.0f,0.0f,-10.0f} 
+	};
 
 #pragma endregion
 
 	bool useMonsterBall = false;
 
-
-	while (true) {
-
+	while (true) 
+	{
 		//Windowsのメッセージ処理
-		if (winApp->ProcessMessage()) {
+		if (winApp->ProcessMessage()) 
+		{
 			//ゲームループを抜ける
 			break;
 		}
@@ -1390,10 +1416,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 開発用UIの処理。実際に開発用のUIを出す場合はここをゲーム固有の処理に置き換える
 		ImGui::ShowDemoWindow();
-
-
-
-		//input->Update();
 
 		// ゲームの処理
 
@@ -1484,7 +1506,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		uvTransformMatrix = Multipty(uvTransformMatrix, MakeRotateXMatrix(uvTransformSprite.rotate.z));
 		uvTransformMatrix = Multipty(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite.translate));
 		//materialSpriteData->uvTransform = uvTransformMatrix;
-
 #pragma endregion
 
 		ImGui::End();

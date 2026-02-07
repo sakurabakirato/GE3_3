@@ -8,19 +8,23 @@ TextureManager* TextureManager::instance = nullptr;
 //ImGuiで0番を使用するため、
 uint32_t TextureManager::kSRVIndexTop = 1;
 
-TextureManager* TextureManager::GetInstance() {
-	if (instance == nullptr) {
+TextureManager* TextureManager::GetInstance() 
+{
+	if (instance == nullptr) 
+	{
 		instance = new TextureManager;
 	}
 	return instance;
 }
 
-void TextureManager::Finalize() {
+void TextureManager::Finalize() 
+{
 	delete instance;
 	instance = nullptr;
 }
 
-void TextureManager::Initialize(DirectXCommon* dxCommon) {
+void TextureManager::Initialize(DirectXCommon* dxCommon) 
+{
 	dxCommon_ = dxCommon;
 	assert(dxCommon_ != nullptr);
 
@@ -28,16 +32,16 @@ void TextureManager::Initialize(DirectXCommon* dxCommon) {
 	textureDatas.reserve(DirectXCommon::kMaxSRVCount);
 }
 
-void TextureManager::LoadTexture(const std::string& filePath) {
-
-
+void TextureManager::LoadTexture(const std::string& filePath) 
+{
 	// 読み込み済みテクスチャを検索
 	auto it = std::find_if(
 		textureDatas.begin(),
 		textureDatas.end(),
 		[&](TextureData& textureData) { return textureData.filePath == filePath; }
 	);
-	if (it != textureDatas.end()) {
+	if (it != textureDatas.end()) 
+	{
 		// 読み込み済みなら早期return
 		return;
 	}
@@ -84,8 +88,10 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	dxCommon_->GetDevice()->CreateShaderResourceView(textureData.resource.Get(), &srvDesc, textureData.srvHandleCPU);
 }
 
-void TextureManager::ReleaseIntermediateResources() {
-	for (size_t i = 0; i < textureDatas.size(); ++i) {
+void TextureManager::ReleaseIntermediateResources() 
+{
+	for (size_t i = 0; i < textureDatas.size(); ++i) 
+	{
 		textureDatas[i].intermediateResource.Reset();
 	}
 }
@@ -98,7 +104,8 @@ uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath)
 		textureDatas.end(),
 		[&](TextureData& textureData) { return textureData.filePath == filePath; }
 	);
-	if (it != textureDatas.end()) {
+	if (it != textureDatas.end()) 
+	{
 		// 読み込み済みなら要素番号を返す
 		uint32_t textureIndex = static_cast<uint32_t>(std::distance(textureDatas.begin(), it));
 		return textureIndex;

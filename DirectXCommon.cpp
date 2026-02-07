@@ -19,8 +19,8 @@ using namespace Microsoft::WRL;
 
 const uint32_t DirectXCommon::kMaxSRVCount = 512;
 
-
-void DirectXCommon::Initialize(WinApp* winApp) {
+void DirectXCommon::Initialize(WinApp* winApp) 
+{
 
 	//WindowsAPIの初期化
 	assert(winApp);
@@ -51,13 +51,13 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 	InitializeImGui();
 }
 
-
-
-void DirectXCommon::Deviceinitialize() {
+void DirectXCommon::Deviceinitialize() 
+{
 #ifdef _DEBUG
 
 	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) 
+	{
 		// デバックレイヤーを有効化する
 		debugController->EnableDebugLayer();
 		// さらにGPU側でもチェックを行うようにする
@@ -83,7 +83,8 @@ void DirectXCommon::Deviceinitialize() {
 		hr = useAdapter->GetDesc3(&adapterDesc);
 		assert(SUCCEEDED(hr));// 取得できないのは一大事
 		// ソフトウェアアダプタでなければ採用！
-		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
+		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) 
+		{
 			// 採用したアダプタの情報をログに出力。wstringの方なので注意
 			//Log(logStream, ConvertString(std::format(L"Use Adapater:{}\n", adapterDesc.Description)));
 			break;
@@ -99,16 +100,19 @@ void DirectXCommon::Deviceinitialize() {
 
 
 	// 昨日レベルとログ出力用の文字列
-	D3D_FEATURE_LEVEL featureLevels[] = {
+	D3D_FEATURE_LEVEL featureLevels[] = 
+	{
 		D3D_FEATURE_LEVEL_12_2,D3D_FEATURE_LEVEL_12_1,D3D_FEATURE_LEVEL_12_0
 	};
 	const char* featureLevelStrings[] = { "12.2","12.1","12.0" };
 	// 高い順に生成できるか試していく
-	for (size_t i = 0; i < _countof(featureLevels); ++i) {
+	for (size_t i = 0; i < _countof(featureLevels); ++i) 
+	{
 		// 採用したアダプターでデバイスを生成
 		hr = D3D12CreateDevice(useAdapter.Get(), featureLevels[i], IID_PPV_ARGS(&device));
 		// 指定した機能レベルでデバイスが生成できたかを確認
-		if (SUCCEEDED(hr)) {
+		if (SUCCEEDED(hr)) 
+		{
 			// 生成できたのでログ出力を行ってループを抜ける
 			//Log(logStream, std::format("FeatrueLevel : {}\n", featureLevelStrings[i]));
 			break;
@@ -122,7 +126,8 @@ void DirectXCommon::Deviceinitialize() {
 #ifdef _DEBUG
 
 	Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue = nullptr;
-	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) 
+	{
 		// やばいエラー時に止まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
 		// エラー時に止まる
@@ -130,7 +135,8 @@ void DirectXCommon::Deviceinitialize() {
 		// 警告時に泊まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 		// 抑制するメッセージのＩＤ
-		D3D12_MESSAGE_ID denyIds[] = {
+		D3D12_MESSAGE_ID denyIds[] = 
+		{
 			// windows11でのDXGIデバックレイヤーとDX12デバックレイヤーの相互作用バグによるエラーメッセージ
 			// https://stackoverflow.com/questions/69805245/directx-12-application-is-crashing-in-windows-11
 			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE };
@@ -150,12 +156,11 @@ void DirectXCommon::Deviceinitialize() {
 }
 
 
-void DirectXCommon::CommandListInitialize() {
-
+void DirectXCommon::CommandListInitialize() 
+{
 	HRESULT hr;
 
 	// コマンドキューを生成する
-
 	D3D12_COMMAND_QUEUE_DESC commandQuesDesc{};
 	hr = device->CreateCommandQueue(&commandQuesDesc, IID_PPV_ARGS(&commandQueue));
 	// コマンドキューの生成が上手くいかなかったので起動できない
@@ -241,8 +246,6 @@ void DirectXCommon::CreateRTV()
 
 	const UINT incrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-
-
 	for (uint32_t i = 0; i < 2; i++)
 	{
 		// 現在のハンドルを配列に保存してから作成する
@@ -254,7 +257,6 @@ void DirectXCommon::CreateRTV()
 		// ローカルハンドルを次のディスクリプタに進める
 		rtvStartHandle.ptr = rtvStartHandle.ptr + incrementSize;
 	}
-
 }
 
 void DirectXCommon::CreateDSV()
@@ -283,30 +285,25 @@ void DirectXCommon::CreateFence()
 	// FenceのSignalを待つためのイベントを作成する
 	HANDLE fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent != nullptr);
-
 }
 
 void DirectXCommon::SetViewportRect()
 {
-
 	viewport.Width = winApp->kClientWidth;
 	viewport.Height = winApp->kClientHeight;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-
 }
 
 void DirectXCommon::SetScissorRect()
 {
-
 	// 基本的にビューボートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
 	scissorRect.right = WinApp::kClientWidth;
 	scissorRect.top = 0;
 	scissorRect.bottom = WinApp::kClientHeight;
-
 }
 
 void DirectXCommon::CreateDXCCompiler()
@@ -323,7 +320,6 @@ void DirectXCommon::CreateDXCCompiler()
 
 void DirectXCommon::InitializeImGui()
 {
-
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -334,23 +330,20 @@ void DirectXCommon::InitializeImGui()
 		srvDescriptorHeap.Get(),
 		srvDescriptorHeap->GetCPUDescriptorHandleForHeapStart(),
 		srvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
-
 }
+
 
 
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
-
 	handleCPU.ptr += (descriptorSize * index);
-
 	return handleCPU;
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE DirectXCommon::GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
-
 	handleGPU.ptr += (descriptorSize * index);
 	return handleGPU;
 }
@@ -694,9 +687,11 @@ void DirectXCommon::UpdateFixFPS()
 	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
 
 	// 1/60秒(よりわずかに短い時間)経ってない場合
-	if (elapsed < kMinCheckTime) {
+	if (elapsed < kMinCheckTime) 
+	{
 		// 1/60秒経過するまで縮小なスリープを繰り返す
-		while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+		while (std::chrono::steady_clock::now() - reference_ < kMinTime) 
+		{
 			//1マイクロ秒スリープ
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
