@@ -58,7 +58,6 @@ struct VertexData
 	Vector2 texcoord;
 	Vector3 normal;
 };
-
 struct Transform 
 {
 	Vector3 scale;
