@@ -1,1 +1,3 @@
-[![DebugBuild](https://github.com/kaisei-tanita05/CG2_LE2C_0_1/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/kaisei-tanita05/CG2_LE2C_0_1/actions/workflows/DebugBuild.yml)
+[![DebugBuild](https://github.com/sakurabakirato/GE3_3/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/sakurabakirato/GE3_3/actions/workflows/DebugBuild.yml)
+[![ReleaseBuild](https://github.com/sakurabakirato/GE3_3/actions/workflows/ReleaseBuild.yml/badge.svg)](https://github.com/sakurabakirato/GE3_3/actions/workflows/ReleaseBuild.yml)
+[![DevelopmentBuild](https://github.com/sakurabakirato/GE3_3/actions/workflows/DevelopmentBuild.yml/badge.svg)](https://github.com/sakurabakirato/GE3_3/actions/workflows/DevelopmentBuild.yml)
