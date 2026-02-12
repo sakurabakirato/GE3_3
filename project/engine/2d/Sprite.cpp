@@ -27,7 +27,8 @@ void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath)
 }
 
 
-void Sprite::Update() {
+void Sprite::Update() 
+{
 
 	float left = 0.0f - anchorPoint.x;
 	float right = 1.0f - anchorPoint.x;
@@ -35,13 +36,15 @@ void Sprite::Update() {
 	float bottom = 1.0f - anchorPoint.y;
 
 	//左右反転
-	if (isFlipX_) {
+	if (isFlipX_) 
+	{
 		left = -left;
 		right = -right;
 	}
 
 	//上下反転
-	if (isFlipY_) {
+	if (isFlipY_) 
+	{
 		top = -top;
 		bottom = -bottom;
 	}
